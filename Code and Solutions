@@ -1,0 +1,78 @@
+#Ques 1
+# carry out an ANOVA to test the hypothesis that the heights of the individuals in the dataset do not vary by site.
+
+mydata <- read.table("Data.txt", header = T)
+
+boxplot(mydata$Height ~ mydata$Site,ylab="Height", xlab="Sites")#create boxplot check assumptions
+
+#Do you think an ANOVA is appropriate in this case and why?
+
+#Yes because we want to compare the means of more than two groups for equality, and we are happy with the
+#assumptions of equal variance and normality.
+
+#What is the null hypothesis and alternative hypothesis?
+#  H0: mu_1=mu_2=mu_3, where mu_i is the pop mean height for site i
+#  H1: at least one mu_i differs
+
+
+#Run the anova test with site in as a factor as it is stored numerically.
+
+anova_height<- aov(Height ~ as.factor(Site),data=mydata)
+
+#Create residual plots to check that the assumptions are met. Open two plots in graphical display, 1 row with
+#2 columns. which=1:2 means that we plot the first two residual plots. We are not interested in the third and
+#fourth residual plots.
+
+par(mfrow=c(2,1))
+plot(anova_height,which=1:2)
+
+
+#Based on the residuals plots, we are happy to assume normality (from the qqplot), equal variance (from the
+                                                                                                 # residuals versus fits plot).
+#Print the ANOVA results:
+
+  summary(anova_height)
+  
+#From the output, are the mean heights the same across all three sites?
+#p-value = 0.89 > 0.05 (sig level)
+#Therefore we fail to reject the null hypothesis and conclude there is no significant difference in means for
+#height across three different sites.
+
+##Ques 2
+#testing the hypothesis that IQ does not vary by site.
+par(mfrow=c(1,1))
+dev.off()
+
+#H0: mu_1=mu_2=mu_3, where mu_i is the pop mean IQ for site i
+#H1: Not all mu_i are equal
+#Create a boxplot to check assumptions.
+
+boxplot(mydata$IQ ~ mydata$Site,ylab="IQ", xlab="Sites")
+
+#Happy with the boxplot for assumptions of normality and equal variance although there does not appear to
+#be a difference in IQ across groups.
+#Run anova test with site in as a factor as it isstored numerically.
+
+
+anova_IQ<- aov(IQ ~ as.factor(Site),data=mydata)
+
+#Create residual plots to check that the assumptions are met. Open two plots in graphical display, 1 row with
+#2 columns. which=1:2 means that we plot the first two residual plots. We are not interested in the third and
+#fourth residual plots.
+
+par(mfrow=c(2,1))
+plot(anova_IQ,which=1:2)
+
+
+#Based on the residuals plots, we are happy to assume normality (from the qqplot), equal variance (from the
+                                                                                                 # residuals versus fits plot).
+#Print the ANOVA results:
+
+  summary(anova_IQ)
+  
+## Df Sum Sq Mean Sq F value Pr(>F)
+## as.factor(Site) 2 47 23.48 0.106 0.9
+## Residuals 57 12632 221.61
+#p-value = 0.9 > 0.05 (sig level)
+#Therefore we fail to reject the null hypothesis and conclude there is no significant difference in mean IQ
+#across the three different sites.
